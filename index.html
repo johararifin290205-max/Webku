@@ -65,29 +65,40 @@
       padding: 14px 60px;
       border-bottom: 1px solid rgba(201,168,76,0.15);
     }
-    .nav-logo {
-      display: flex; flex-direction: column;
-    .nav-logo-img {
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-img {
   width: 50px;
   height: 50px;
   object-fit: contain;
-    }
-    }
-    .nav-logo-name {
-      font-family: var(--font-display);
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--gold);
-      letter-spacing: 0.5px;
-      line-height: 1.2;
-    }
-    .nav-logo-tagline {
-      font-size: 9px;
-      font-weight: 300;
-      color: var(--cream-dim);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
+  flex-shrink: 0;
+}
+
+.nav-logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-logo-name {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+
+.nav-logo-tagline {
+  font-size: 9px;
+  font-weight: 300;
+  color: var(--cream-dim);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
     .nav-links {
       display: flex; gap: 36px; list-style: none;
     }
@@ -666,8 +677,9 @@
 <!-- ── NAV ── -->
 <nav id="navbar">
 <div class="nav-logo">
-  <img src="logo.png" alt="PT Artha Panuntun Masadepanku" class="logo-img">
-  <div>
+  <img src="images.png" alt="PT Artha Panuntun Masadepanku" class="logo-img">
+
+  <div class="nav-logo-text">
     <span class="nav-logo-name">PT Artha Panuntun</span>
     <span class="nav-logo-tagline">One Stop Service Haji & Umrah</span>
   </div>
