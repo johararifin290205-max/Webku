@@ -678,6 +678,118 @@
       .reveal { opacity: 1; transform: none; transition: none; }
       .hero-scroll-line { animation: none; }
     }
+    /* ── GALERI / DOKUMENTASI SLIDER ── */
+#galeri { background: #111111; overflow: hidden; padding: 100px 60px; }
+.galeri-wrap {
+  position: relative;
+  margin-top: 60px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.galeri-grid {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-bottom: 8px;
+  cursor: grab;
+  -webkit-overflow-scrolling: touch;
+}
+.galeri-grid.dragging { cursor: grabbing; scroll-snap-type: none; }
+.galeri-grid::-webkit-scrollbar { height: 5px; }
+.galeri-grid::-webkit-scrollbar-track { background: #1C1C1C; }
+.galeri-grid::-webkit-scrollbar-thumb { background: #8B6914; border-radius: 3px; }
+
+.galeri-item {
+  position: relative;
+  flex: 0 0 auto;
+  width: 320px;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border: 1px solid rgba(201,168,76,0.2);
+  background: #1C1C1C;
+  scroll-snap-align: start;
+  user-select: none;
+}
+.galeri-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.6s ease, filter 0.6s ease;
+  filter: grayscale(15%) brightness(0.92);
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+.galeri-item:hover img {
+  transform: scale(1.06);
+  filter: grayscale(0%) brightness(1);
+}
+.galeri-item::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(8,8,8,0.55) 0%, transparent 45%);
+  pointer-events: none;
+}
+.galeri-item::before {
+  content: '';
+  position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
+  border: 1px solid rgba(201,168,76,0);
+  transition: border-color 0.4s;
+  pointer-events: none;
+  z-index: 2;
+}
+.galeri-item:hover::before {
+  border-color: rgba(201,168,76,0.5);
+}
+
+.galeri-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: rgba(8,8,8,0.85);
+  border: 1px solid #C9A84C;
+  color: #C9A84C;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  z-index: 5;
+  transition: background 0.3s, transform 0.2s;
+}
+.galeri-arrow:hover { background: #C9A84C; color: #080808; }
+.galeri-arrow.prev { left: -8px; }
+.galeri-arrow.next { right: -8px; }
+.galeri-arrow svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; }
+
+.galeri-wrap::before,
+.galeri-wrap::after {
+  content: '';
+  position: absolute; top: 0; bottom: 8px;
+  width: 60px; z-index: 3; pointer-events: none;
+}
+.galeri-wrap::before {
+  left: 0;
+  background: linear-gradient(to right, #111111, transparent);
+}
+.galeri-wrap::after {
+  right: 0;
+  background: linear-gradient(to left, #111111, transparent);
+}
+
+@media (max-width: 1024px) {
+  .galeri-item { width: 260px; }
+  .galeri-arrow { width: 40px; height: 40px; }
+}
+@media (max-width: 768px) {
+  #galeri { padding: 60px 24px; }
+  .galeri-wrap { margin-top: 40px; }
+  .galeri-item { width: 220px; }
+  .galeri-grid { gap: 12px; }
+  .galeri-arrow { display: none; }
+  .galeri-wrap::before, .galeri-wrap::after { width: 30px; }
+}
   </style>
 </head>
 <body>
@@ -946,6 +1058,8 @@
       </div>
     </div>
 
+    
+
     <!-- DOMESTIK -->
     <div class="layanan-domestik reveal">
       <div class="domestik-grid">
@@ -975,6 +1089,31 @@
   </div>
 </section>
 
+  <section id="galeri">
+  <div class="galeri-wrap">
+    <div class="galeri-grid" id="galeriGrid">
+      <div class="galeri-item">
+        <img src="1.jpg" alt="Dokumentasi kegiatan 1" loading="lazy" />
+      </div>
+      <div class="galeri-item">
+        <img src="2.jpg" alt="Dokumentasi kegiatan 2" loading="lazy" />
+      </div>
+      <div class="galeri-item">
+        <img src="3.jpg" alt="Dokumentasi kegiatan 3" loading="lazy" />
+      </div>
+      <div class="galeri-item">
+        <img src="4.jpg" alt="Dokumentasi kegiatan 4" loading="lazy" />
+      </div>
+    </div>
+    <button class="galeri-arrow prev" id="galeriPrev" aria-label="Sebelumnya">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
+    <button class="galeri-arrow next" id="galeriNext" aria-label="Selanjutnya">
+      <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </button>
+  </div>
+  </section>
+  
 <!-- ── KEUNGGULAN + LEGALITAS ── -->
 <section id="keunggulan">
   <div class="container">
@@ -1216,6 +1355,59 @@ window.addEventListener('scroll', function () {
     nav.classList.remove('scrolled');
   }
 });
+  </script>
+  <script>
+  const galeriGrid = document.getElementById('galeriGrid');
+  const galeriPrev = document.getElementById('galeriPrev');
+  const galeriNext = document.getElementById('galeriNext');
+
+  if (galeriGrid && galeriPrev && galeriNext) {
+    const scrollAmount = () => {
+      const item = galeriGrid.querySelector('.galeri-item');
+      return item ? item.offsetWidth + 20 : 320;
+    };
+
+    galeriNext.addEventListener('click', () => {
+      galeriGrid.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
+    });
+    galeriPrev.addEventListener('click', () => {
+      galeriGrid.scrollBy({ left: -scrollAmount(), behavior: 'smooth' });
+    });
+
+    let isDown = false, startX, scrollStart;
+    galeriGrid.addEventListener('mousedown', (e) => {
+      isDown = true;
+      galeriGrid.classList.add('dragging');
+      startX = e.pageX;
+      scrollStart = galeriGrid.scrollLeft;
+    });
+    window.addEventListener('mouseup', () => {
+      isDown = false;
+      galeriGrid.classList.remove('dragging');
+    });
+    galeriGrid.addEventListener('mouseleave', () => {
+      isDown = false;
+      galeriGrid.classList.remove('dragging');
+    });
+    galeriGrid.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const dx = e.pageX - startX;
+      galeriGrid.scrollLeft = scrollStart - dx;
+    });
+
+    const updateArrows = () => {
+      const atStart = galeriGrid.scrollLeft <= 4;
+      const atEnd = galeriGrid.scrollLeft + galeriGrid.clientWidth >= galeriGrid.scrollWidth - 4;
+      galeriPrev.style.opacity = atStart ? '0.3' : '1';
+      galeriPrev.style.pointerEvents = atStart ? 'none' : 'auto';
+      galeriNext.style.opacity = atEnd ? '0.3' : '1';
+      galeriNext.style.pointerEvents = atEnd ? 'none' : 'auto';
+    };
+    galeriGrid.addEventListener('scroll', updateArrows);
+    window.addEventListener('load', updateArrows);
+    updateArrows();
+  }
   </script>
 </body>
 </html>
